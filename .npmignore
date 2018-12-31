@@ -10,3 +10,7 @@ android/app/build/
 android/.idea
 android/.gradle
 example/
+android/build
+android/gradle
+android/gradlew
+android/gradlew.bat
