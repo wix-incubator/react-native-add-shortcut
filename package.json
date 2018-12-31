@@ -1,9 +1,21 @@
 {
   "name": "react-native-add-shortcut",
-  "version": "0.1.0",
+  "version": "0.2.0",
+  "description": "React Native Add Shortcut - Adding shortcuts on android",
+  "nativePackage": true,
+  "author": "Shalom Yerushalmy <shalomy@wix.com>",
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest"
+  },
+  "homepage": "https://github.com/wix/react-native-add-shortcut",
+  "readme": "https://github.com/wix/react-native-add-shortcut#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wix/react-native-add-shortcut.git"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
     "react": "16.6.3",
