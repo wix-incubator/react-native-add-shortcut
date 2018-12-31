@@ -9,3 +9,4 @@ android/app/build/
 .idea
 android/.idea
 android/.gradle
+example/
