@@ -5,3 +5,7 @@
 node_modules
 
 build/
+android/app/build/
+.idea
+android/.idea
+android/.gradle
