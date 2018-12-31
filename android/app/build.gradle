@@ -98,7 +98,7 @@ android {
   buildToolsVersion '28.0.2'
 
   defaultConfig {
-    applicationId "com.reactnativeaddshortcuthomescreen"
+    applicationId "com.reactnativeaddshortcut"
     minSdkVersion rootProject.ext.minSdkVersion
     targetSdkVersion rootProject.ext.targetSdkVersion
     versionCode 1
