@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -44,10 +45,8 @@ public class AddShortcutModule extends ReactContextBaseJavaModule {
         int width = bm.getWidth();
         int height = bm.getHeight();
 
-        Drawable drawable = getReactApplicationContext().getResources().getDrawable(R.mipmap.ic_launcher_roundy);
-
-        int newWidth = drawable.getIntrinsicWidth();
-        int newHeight = drawable.getIntrinsicHeight();
+        int newWidth = 196;
+        int newHeight = 196;
 
         float scaleWidth = ((float) newWidth) / width;
         float scaleHeight = ((float) newHeight) / height;
@@ -61,30 +60,22 @@ public class AddShortcutModule extends ReactContextBaseJavaModule {
         return resizedBitmap;
     }
 
-    private Bitmap drawableFromUrl(String url) {
+    private Bitmap drawableFromUrl(String url) throws IOException {
         Bitmap bitmap;
-        try {
-            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-            connection.setRequestProperty("User-agent","Mozilla/4.0");
+        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.setRequestProperty("User-agent","Mozilla/4.0");
 
-            connection.connect();
-            InputStream input = connection.getInputStream();
+        connection.connect();
+        InputStream input = connection.getInputStream();
 
-            bitmap = BitmapFactory.decodeStream(input);
-        } catch (IOException e) {
-            bitmap = BitmapFactory
-                    .decodeResource(
-                            getReactApplicationContext().getResources(),
-                            R.mipmap.ic_launcher_roundy
-                    );
-        }
+        bitmap = BitmapFactory.decodeStream(input);
 
         return getResizedBitmap(bitmap);
     }
 
     @ReactMethod
     @TargetApi(25)
-    private void setDynamicShortcuts(ReadableArray shortcuts) {
+    private void setDynamicShortcuts(ReadableArray shortcuts) throws IOException {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             List<ShortcutInfo> list = new ArrayList<>();
             ShortcutManager mShortcutManager = getReactApplicationContext().getSystemService(ShortcutManager.class);
@@ -117,7 +108,7 @@ public class AddShortcutModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     @TargetApi(25)
-    private void setPinnedShortcuts(ReadableMap shortcut) {
+    private void setPinnedShortcuts(ReadableMap shortcut) throws IOException {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             ShortcutManager mShortcutManager = getReactApplicationContext().getSystemService(ShortcutManager.class);
             String name = shortcut.getString(NAME);
