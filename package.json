@@ -1,6 +1,6 @@
 {
   "name": "react-native-add-shortcut",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "React Native Add Shortcut - Adding shortcuts on android",
   "nativePackage": true,
   "license": "MIT",

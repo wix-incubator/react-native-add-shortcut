@@ -94,3 +94,13 @@ AddShortcut.setPinnedShortcuts({
 | name | String | Short label, Long label and ID. |
 | imageUrl | String | Image url to fetch for the icons. |
 | deepLink | String | Deep link to open when tapping the shortcut. |
+
+**Remove All Dynamic Shortcuts**
+```js
+AddShortcut.removeAllDynamicShortcuts()
+```
+
+**Get Dynamic Shortcuts** - return List<ShortcutInfo>
+```js
+AddShortcut.getDynamicShortcuts()
+```

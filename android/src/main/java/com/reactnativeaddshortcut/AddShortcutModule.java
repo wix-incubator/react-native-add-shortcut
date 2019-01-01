@@ -44,7 +44,7 @@ public class AddShortcutModule extends ReactContextBaseJavaModule {
         int width = bm.getWidth();
         int height = bm.getHeight();
 
-        Drawable drawable = getReactApplicationContext().getResources().getDrawable(R.mipmap.ic_launcher_round);
+        Drawable drawable = getReactApplicationContext().getResources().getDrawable(R.mipmap.ic_launcher_roundy);
 
         int newWidth = drawable.getIntrinsicWidth();
         int newHeight = drawable.getIntrinsicHeight();
@@ -75,7 +75,7 @@ public class AddShortcutModule extends ReactContextBaseJavaModule {
             bitmap = BitmapFactory
                     .decodeResource(
                             getReactApplicationContext().getResources(),
-                            R.mipmap.ic_launcher_round
+                            R.mipmap.ic_launcher_roundy
                     );
         }
 
@@ -140,6 +140,27 @@ public class AddShortcutModule extends ReactContextBaseJavaModule {
                     .build();
             if (mShortcutManager != null) {
                 mShortcutManager.requestPinShortcut(shortcutInfo, null);
+            }
+        }
+    }
+
+    @ReactMethod
+    @TargetApi(25)
+    private List<ShortcutInfo> getDynamicShortcuts() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ShortcutManager mShortcutManager = getReactApplicationContext().getSystemService(ShortcutManager.class);
+            return mShortcutManager != null ? mShortcutManager.getDynamicShortcuts() : null;
+        }
+        return null;
+    }
+
+    @ReactMethod
+    @TargetApi(25)
+    private void removeAllDynamicShortcuts() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ShortcutManager mShortcutManager = getReactApplicationContext().getSystemService(ShortcutManager.class);
+            if (mShortcutManager != null) {
+                mShortcutManager.removeAllDynamicShortcuts();
             }
         }
     }
