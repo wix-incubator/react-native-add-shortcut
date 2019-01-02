@@ -6,13 +6,15 @@ import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.graphics.drawable.Drawable;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.Icon;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
-import android.util.Log;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -37,34 +39,36 @@ public class AddShortcutModule extends ReactContextBaseJavaModule {
         super(reactContext);
     }
 
+    private Bitmap getCircularBitmap(Bitmap srcBitmap) {
+        int squareBitmapWidth = Math.min(srcBitmap.getWidth(), srcBitmap.getHeight());
+
+        Bitmap dstBitmap = Bitmap.createBitmap(
+                squareBitmapWidth, // Width
+                squareBitmapWidth, // Height
+                Bitmap.Config.ARGB_8888 // Config
+        );
+
+        Canvas canvas = new Canvas(dstBitmap);
+
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+
+        Rect rect = new Rect(0, 0, squareBitmapWidth, squareBitmapWidth);
+        RectF rectF = new RectF(rect);
+        canvas.drawOval(rectF, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        float left = (squareBitmapWidth-srcBitmap.getWidth())/2;
+        float top = (squareBitmapWidth-srcBitmap.getHeight())/2;
+        canvas.drawBitmap(srcBitmap, left, top, paint);
+
+        srcBitmap.recycle();
+
+        return dstBitmap;
+    }
+
     @Override
     public String getName() {
         return "AddShortcut";
-    }
-
-    private Bitmap getResizedBitmap(Bitmap bm) {
-        int width = bm.getWidth();
-        int height = bm.getHeight();
-
-        int newWidth = 196;
-        int newHeight = 196;
-
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
-        // CREATE A MATRIX FOR THE MANIPULATION
-        Matrix matrix = new Matrix();
-        // RESIZE THE BIT MAP
-        matrix.postScale(scaleWidth, scaleHeight);
-
-        // "RECREATE" THE NEW BITMAP
-        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
-        return resizedBitmap;
-    }
-
-    private Bitmap getThumbnail(Bitmap bitmap) {
-        final int THUMBSIZE = 196;
-
-        return ThumbnailUtils.extractThumbnail(bitmap, THUMBSIZE, THUMBSIZE);
     }
 
     private Bitmap drawableFromUrl(String url) throws IOException {
@@ -77,7 +81,7 @@ public class AddShortcutModule extends ReactContextBaseJavaModule {
 
         bitmap = BitmapFactory.decodeStream(input);
 
-        return getThumbnail(bitmap);
+        return getCircularBitmap(bitmap);
     }
 
     @ReactMethod
