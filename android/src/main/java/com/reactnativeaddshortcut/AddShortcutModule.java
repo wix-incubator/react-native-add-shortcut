@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
@@ -60,6 +61,12 @@ public class AddShortcutModule extends ReactContextBaseJavaModule {
         return resizedBitmap;
     }
 
+    private Bitmap getThumbnail(Bitmap bitmap) {
+        final int THUMBSIZE = 196;
+
+        return ThumbnailUtils.extractThumbnail(bitmap, THUMBSIZE, THUMBSIZE);
+    }
+
     private Bitmap drawableFromUrl(String url) throws IOException {
         Bitmap bitmap;
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
@@ -70,7 +77,7 @@ public class AddShortcutModule extends ReactContextBaseJavaModule {
 
         bitmap = BitmapFactory.decodeStream(input);
 
-        return getResizedBitmap(bitmap);
+        return getThumbnail(bitmap);
     }
 
     @ReactMethod
